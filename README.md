@@ -161,7 +161,7 @@ Intelligent-flight-pricing/
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your-username/Intelligent-flight-pricing.git
+   git clone https://github.com/sai-charish/Intelligent-flight-pricing.git
    cd Intelligent-flight-pricing
    ```
 
