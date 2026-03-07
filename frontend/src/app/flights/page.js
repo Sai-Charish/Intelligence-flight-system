@@ -4,12 +4,8 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import FlightCard from "@/components/FlghtCard";
 import FiltersSidebar from "@/components/FiltersSidebar";
-
-function getDurationMins(flight) {
-  const [dh, dm] = flight.departure_time.split(":").map(Number);
-  const [ah, am] = flight.arrival_time.split(":").map(Number);
-  return ah * 60 + am - (dh * 60 + dm);
-}
+import RouteHeading from "@/components/RouteHeading";
+import { getDurationMins, getFlights } from "@/services/modules";
 
 export default function FlightsPage() {
   const searchParams = useSearchParams();
@@ -26,18 +22,12 @@ export default function FlightsPage() {
   useEffect(() => {
     async function fetchFlights() {
       setLoading(true);
-      try {
-        const res = await fetch(
-          `http://localhost:8000/api/flights/?source=${source}&destination=${destination}&date=${date}`,
-        );
-        const data = await res.json();
-        setFlights(data);
-        setFilteredFlights(data);
-      } catch (e) {
-        console.error(e);
-      } finally {
-        setLoading(false);
-      }
+      const data = await getFlights(source, destination, date);
+
+      setFlights(data);
+      setFilteredFlights(data);
+
+      setLoading(false);
     }
     if (source && destination && date) fetchFlights();
   }, [source, destination, date]);
@@ -82,20 +72,13 @@ export default function FlightsPage() {
     <div className="min-h-screen bg-stone-50">
       <div className="max-w-5xl mx-auto px-10 py-12">
         {/* Route heading */}
-        <div className="mb-10">
-          <p className="text-xs font-medium tracking-[0.2em] uppercase text-stone-400 mb-3">
-            Machine Learning · Flight Pricing
-          </p>
-          <h1 className="text-4xl font-light text-stone-800 leading-tight tracking-tight">
-            {source} <span className="font-light text-stone-300">→</span>{" "}
-            <span className="font-semibold text-stone-900">{destination}</span>
-          </h1>
-          <p className="text-stone-400 text-sm font-light mt-2">
-            {formattedDate}
-            {flights.length > 0 && ` · ${flights.length} flights available`}
-            {minPrice && ` · from ₹${minPrice.toLocaleString("en-IN")}`}
-          </p>
-        </div>
+        <RouteHeading
+          flightsLen={flights.length}
+          source={source}
+          destination={destination}
+          minPrice={minPrice}
+          formattedDate={formattedDate}
+        />
 
         {/* Divider */}
         <div className="h-px bg-stone-200 mb-10" />

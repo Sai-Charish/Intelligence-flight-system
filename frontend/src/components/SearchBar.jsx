@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { getCities } from "@/data/cities";
+import { getCities } from "@/services/modules";
 
 export default function SearchBar() {
   const router = useRouter();

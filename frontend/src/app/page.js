@@ -19,9 +19,9 @@ export default function Home() {
         <p className="text-stone-400 mt-4 mb-10 text-sm font-light leading-relaxed max-w-sm">
           Smart airline ticket pricing powered by machine learning
         </p>
-
-        <SearchBar />
       </div>
+
+      <SearchBar />
 
       {/* Divider */}
       <div className="w-px h-16 bg-stone-200 mt-20 mb-16" />

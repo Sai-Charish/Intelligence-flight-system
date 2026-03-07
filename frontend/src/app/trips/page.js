@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { getTrips } from "@/services/modules";
 
 export default function TripPage() {
   const [trips, setTrips] = useState([]);
@@ -7,49 +8,14 @@ export default function TripPage() {
 
   useEffect(() => {
     async function fetchTrips() {
-      try {
-        const res = await fetch("http://localhost:8000/api/bookings/?user=1");
-        const bookings = await res.json();
-
-        // Fetch flight details for each booking in parallel
-        const enriched = await Promise.all(
-          bookings.map(async (booking) => {
-            try {
-              const flightRes = await fetch(
-                `http://localhost:8000/api/flights/${booking.flight}/`,
-              );
-              const flight = await flightRes.json();
-
-              // Compute duration from departure and arrival time
-              const [depH, depM] = flight.departure_time.split(":").map(Number);
-              const [arrH, arrM] = flight.arrival_time.split(":").map(Number);
-              const totalMins = arrH * 60 + arrM - (depH * 60 + depM);
-              const hrs = Math.floor(totalMins / 60);
-              const mins = totalMins % 60;
-              const duration =
-                hrs > 0 && mins > 0
-                  ? `${hrs}h ${mins}m`
-                  : hrs > 0
-                    ? `${hrs}h`
-                    : `${mins}m`;
-
-              return { ...booking, flightDetails: { ...flight, duration } };
-            } catch {
-              return { ...booking, flightDetails: null };
-            }
-          }),
-        );
-
-        setTrips(enriched);
-      } catch (err) {
-        console.error("Failed to fetch trips", err);
-      } finally {
-        setLoading(false);
-      }
+      const booking = await getTrips();
+      setTrips(booking);
+      setLoading(false);
     }
     fetchTrips();
   }, []);
 
+  console.log(trips);
   return (
     <div className="min-h-screen bg-stone-50 px-6 py-16">
       <div className="max-w-2xl mx-auto">
