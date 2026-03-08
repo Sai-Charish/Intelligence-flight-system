@@ -1,5 +1,7 @@
 export async function getCities() {
-  const response = await fetch("http://localhost:8000/api/cities/");
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/cities/`,
+  );
   const data = await response.json();
   return data;
 }
@@ -13,7 +15,7 @@ export function getDurationMins(flight) {
 export async function getFlights(source, destination, date) {
   try {
     const res = await fetch(
-      `http://localhost:8000/api/flights/?source=${source}&destination=${destination}&date=${date}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/flights/?source=${source}&destination=${destination}&date=${date}`,
     );
     const data = await res.json();
     return data;
@@ -39,7 +41,9 @@ export function getSeatStatus(seat, bookedSeats, selectedSeats) {
 
 export async function getTrips() {
   try {
-    const res = await fetch("http://localhost:8000/api/bookings/?user=1");
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/bookings/?user=1`,
+    );
     const bookings = await res.json();
 
     // Fetch flight details for each booking in parallel
@@ -47,7 +51,7 @@ export async function getTrips() {
       bookings.map(async (booking) => {
         try {
           const flightRes = await fetch(
-            `http://localhost:8000/api/flights/${booking.flight}/`,
+            `${process.env.NEXT_PUBLIC_API_URL}/api/flights/${booking.flight}/`,
           );
           const flight = await flightRes.json();
 

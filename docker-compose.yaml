@@ -1,0 +1,52 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: flight_postgres
+    restart: always
+    environment:
+      POSTGRES_DB: flight_pricing
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build: ./Backend
+    container_name: flight_backend
+    command: >
+      sh -c "
+      python manage.py migrate &&
+      python ml/data_generator.py &&
+      python manage.py runserver 0.0.0.0:8000
+      "
+    volumes:
+      - ./Backend:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    environment:
+      DB_NAME: flight_pricing
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_HOST: postgres
+      DB_PORT: 5432
+
+  frontend:
+    build: ./Frontend
+    container_name: flight_frontend
+    command: npm run dev
+    volumes:
+      - ./Frontend:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8000
+
+volumes:
+  postgres_data:

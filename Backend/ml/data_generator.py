@@ -1,3 +1,13 @@
+import os
+import sys
+import django
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
+django.setup()
+
 import random
 from datetime import datetime, timedelta, time
 
@@ -43,6 +53,24 @@ def generate_users():
 
     print("500 users generated")
 
+
+def generate_cities():
+
+    cities = [
+        ["Hyderabad","HYD"],
+        ["Chennai","MAA"],
+        ["Mumbai","BOM"],
+        ["Delhi","DEL"],
+        ["Bangalore","BLR"]
+    ]
+
+    for city in cities :
+        City.objects.create(
+            name = city[0],
+            airport_code = city[1],
+        )
+
+    print("Cities Created successfully")
 
 def generate_flights():
 
@@ -186,6 +214,9 @@ def run():
     print("Generating users...")
     generate_users()
 
+    print("Generating Cities...")
+    generate_cities()
+
     print("Generating flights...")
     generate_flights()
 
@@ -193,3 +224,7 @@ def run():
     generate_bookings_and_price_history()
 
     print("Data generation completed.")
+
+
+if __name__ == "__main__" :
+    run()
