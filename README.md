@@ -3,6 +3,7 @@
 A full-stack application that simulates airline ticket booking with dynamic pricing, combining a Django REST backend, PostgreSQL database, React/Next.js frontend, and a machine learning pricing engine.
 
 ---
+![alt text](img/Screenshot%202026-03-09%20092415.png)
 
 ##  Overview
 
