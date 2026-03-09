@@ -158,23 +158,120 @@ Intelligent-flight-pricing/
 
 ---
 
-##  Getting Started
+##  How to run this repo
 
-1. **Clone the repository**
+**Clone the repository**
    ```bash
    git clone https://github.com/sai-charish/Intelligent-flight-pricing.git
    cd Intelligent-flight-pricing
    ```
+### Using Docker
 
-2. **Setup backend and frontend** — refer to the `readme.md` inside each respective folder for detailed instructions.
+It is easy and used only for testing purpose 
+- make sure you have installed docker and the docker engine is running
+```bash
+# docker installed command
+> docker --version
+output : Docker version 29.1.3, build f52814d (or similar)
 
-3. **Generate synthetic data** using the data generator module.
+#docker running verification command
+>docker ps
+output : not a error shows conatiner details
+```
 
-4. **Run the backend server**
+- use `docker compose up --build` to start the docker compose file.
+- use `docker compose down -v` to delete all the images while closing (If you dont use `-v` it will imapact on relanching)
+   
+> Note: It will take few min to create and run images in conatiners. But it is easy and dont need any 3rd party installation.
 
-5. **Run the frontend application**
+### Using Terminal or IDE
 
-6. **Use the app** — search flights, book seats, and view your bookings.
+This method is used for development and code analysis. 
+
+prerequities:
+- install node and check for `node --version`.
+- install python and check for `python --version`.
+- install postgres SQL.
+
+  
+#### Setting up Frontend
+- Go to frontend `> cd ./frontend/`
+- use following commands to install and run
+```bash
+>npm install
+>npm run dev
+```
+- you can see its running on port :3000 if working
+
+  
+
+#### Setting up Postgres sql
+- open pgAdmin4 app and create a database (alt + shift + N) with the name flight_pricing.
+
+
+
+#### Setting up Backend
+- Go to backend `>cd ./Backend/`.
+- Before running make sure that you modify this in Backend
+- In Backend/config/settings.py 
+```bash
+
+---------------------------------------------------
+                **CHANGE THIS TO**
+---------------------------------------------------
+
+
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("DB_NAME", "flight_pricing"),
+        "USER": os.getenv("DB_USER", "postgres"),
+        "PASSWORD": os.getenv("DB_PASSWORD", "1349"),
+        "HOST": os.getenv("DB_HOST", "localhost"),
+        "PORT": os.getenv("DB_PORT", "5432"),
+    }
+}
+
+---------------------------------------------------
+                **THIS**
+---------------------------------------------------
+
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("DB_NAME", "flight_pricing"),
+        "USER": os.getenv("DB_USER", "**YOUR_DB_USERNAME"),
+        "PASSWORD": os.getenv("DB_PASSWORD", "**YOUR_DB_PASSWORD"),
+        "HOST": os.getenv("DB_HOST", "localhost"),
+        "PORT": os.getenv("DB_PORT", "5432"),
+    }
+}
+
+
+```
+- open terminal and use the following commands
+```bash
+# creating virtual environment
+> python -m venv env
+
+# actiavting virtual environment
+> env\Scripts\activate
+
+# instaling required packages
+> pip install -r requirement.txt
+
+# make migrations in db (creating schema in postgres using django)
+>python manage.py migrate
+
+# populate the database with synthetic data
+> python ml/data_generator.py
+
+# running backend
+>python manage.py runserver
+```
+
+- you can access it throught http://localhost:8000
+
 
 ---
 
