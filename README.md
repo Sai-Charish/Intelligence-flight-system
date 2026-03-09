@@ -196,6 +196,7 @@ prerequities:
   
 #### Setting up Frontend
 - Go to frontend `> cd ./frontend/`
+- create a file with name `.env.local` and paste the following command into file `NEXT_PUBLIC_API_URL=http://localhost:8000`
 - use following commands to install and run
 ```bash
 >npm install
