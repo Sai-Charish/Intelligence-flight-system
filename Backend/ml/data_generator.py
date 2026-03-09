@@ -61,7 +61,7 @@ def generate_cities():
         ["Chennai","MAA"],
         ["Mumbai","BOM"],
         ["Delhi","DEL"],
-        ["Bangalore","BLR"]
+        ["Bangalore","BLdR"]
     ]
 
     for city in cities :

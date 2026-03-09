@@ -37,7 +37,8 @@ services:
   frontend:
     build: ./Frontend
     container_name: flight_frontend
-    command: npm run dev
+    command: sh -c "npm run build &&
+      npm run start"
     volumes:
       - ./Frontend:/app
       - /app/node_modules
